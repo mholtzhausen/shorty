@@ -2,7 +2,10 @@ import Head from 'next/head'
 import { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { Alert, Button, Form, Input, Layout, Typography } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
 import styles from '../styles/Home.module.css'
+
+
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -23,18 +26,22 @@ type FormValues = {
 export default function Home() {
   const [status, setStatus] = useState<'initial' | 'error' | 'success'>('initial');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState<Boolean>(false);
   const [form] = Form.useForm();
 
   const onFinish = async ({ link }: FormValues) => {
+    setLoading(true)
     try {
       const response = await axios.post<ShortenLinkResponse>('/api/shorten_link', { link });
       setStatus('success');
       setMessage(response.data?.short_link);
+      setLoading(false)
     }
     catch(e) {
       const error = e as AxiosError<ShortenLinkError>;
       setStatus('error');
       setMessage(error.response?.data?.error_description || 'Something went wrong!');
+      setLoading(false)
     }
   }
 
@@ -47,11 +54,11 @@ export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>Yet Another Link Shortner</title>
+        <title>Shorty</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header>
-        <div className={styles.logo} />
+        <div className={styles.logo} >Shorty</div>
       </Header>
       <Content className={styles.content}>
         <div className={styles.shortner}>
@@ -73,8 +80,9 @@ export default function Home() {
               </div>
               <div className={styles.linkFieldButton}>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit" style={{ width: '100%' }} size="large">
-                    Shorten!
+                  <Button type="primary" htmlType="submit" style={{ width: '100px' }} size="large">
+                    {loading?<LoadingOutlined />:'Shorten!'}
+                    
                   </Button>
                 </Form.Item>
               </div>
@@ -84,7 +92,7 @@ export default function Home() {
         </div>
       </Content>
       <Footer className={styles.footer}>
-        Yet Another Link Shortener (YALS) &copy; 2021
+        Shorty &copy; 2021
       </Footer>
     </Layout>
   )
