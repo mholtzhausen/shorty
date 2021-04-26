@@ -92,7 +92,7 @@ export default function Home() {
         </div>
       </Content>
       <Footer className={styles.footer}>
-        Shorty &copy; 2021
+      Environment: {process.env.NEXT_PUBLIC_VERCEL_ENV} | Shorty &copy; 2021 | Alt: 1
       </Footer>
     </Layout>
   )
