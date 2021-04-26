@@ -1,9 +1,3 @@
 {
-    "rewrites": [{ "source": "/r/:id", "destination": "/api/redirect?id=:id" }],
-    "functions": {
-        "api/*": {
-          "memory": 512,
-          "maxDuration": 8
-        }
-      }    
+    "rewrites": [{ "source": "/r/:id", "destination": "/api/redirect?id=:id" }]
 }
